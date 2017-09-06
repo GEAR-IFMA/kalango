@@ -1,0 +1,15 @@
+mutex moveMutex;
+
+task ligar_a() {
+  OnFwd(OUT_A, 70);
+  Wait(2000);
+}
+
+task ligar_b() {
+  OnRev(OUT_C, 70);
+  Wait(2000);
+}
+
+task main() {
+  Precedes(ligar_a, ligar_b);
+}
