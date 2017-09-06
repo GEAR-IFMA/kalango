@@ -1,0 +1,400 @@
+// ex_counter.nxc
+// Simulation of a digital counter odometer-like display. The 
+// counter digits are displayed in seven-segment form such as 
+// used in many electronic instrument displays.
+
+// Right button increments count.
+// Left button decrements count.
+// Center button zeros count.
+// Gray button halts and exits program.
+
+// Buttons must be bumped (pressed and released) for operations to 
+// execute.
+
+// DIGITS determines how many digits the counter maintains and 
+// displays. It should no bigger than 5. If not set at compile 
+// time, it will default to 3.
+#ifndef DIGITS
+#define DIGITS 3
+#endif
+
+// Counter globals
+mutex counter_mutex;
+bool counter_changed;
+int counter[DIGITS];
+
+// Section defining 7-segment display functions
+
+// Dimensions of the segments of a 7-segment digit
+#define HRZ_W 8
+#define HRZ_H 2
+#define VRT_W 2
+#define VRT_H 8
+
+// Dimensions of the spaces occupied by the segments.
+#define HRZ_CELL_W (HRZ_W + 1)
+#define HRZ_CELL_H (HRZ_H + 1)
+#define VRT_CELL_W (VRT_W + 1)
+#define VRT_CELL_H (VRT_H + 1)
+
+// Constants used to position digits on the display.
+#define DIGIT_WIDTH (HRZ_CELL_W + 2 * VRT_CELL_W + 2)
+#define COUNTER_WIDTH (DIGIT_WIDTH * DIGITS)
+#define X_OFFSET ((100 - COUNTER_WIDTH) / 2)
+#define DIGIT_HEIGHT (3 * HRZ_CELL_H + 2 * VRT_CELL_H)
+#define Y_OFFSET ((64 - DIGIT_HEIGHT) / 2)
+
+// Draw a horizontal segment at screen location (x, y), which is at  
+// the lower-left corner of the segment.
+inline void hrz_segment_out(int x, int y)
+{
+   RectOut(x, y, HRZ_W, HRZ_H, DRAW_OPT_FILL_SHAPE);
+}
+
+// Draw a vertical segment at screen location (x, y), which is at  
+// the lower-left corner of the segment.
+inline void vrt_segment_out(int x, int y)
+{
+   RectOut(x, y, VRT_W, VRT_H, DRAW_OPT_FILL_SHAPE);
+}
+
+/*
+    aaa
+   e   b
+   e   b
+   e   b
+    ggg       the segments of a 7-segment display
+   f   c
+   f   c
+   f   c
+    ddd
+    
+    The reference point (ref_x, ref_y) for positioning a 7-segment 
+    digit on the NXT screen is at its lower right corner.
+*/
+
+// Draw segment aaa at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_a_out(int ref_x, int ref_y)
+{
+   const int dx = VRT_CELL_W;
+   const int dy = 2 * HRZ_CELL_H + 2 * VRT_CELL_H;
+   hrz_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// Draw segment bbb at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_b_out(int ref_x, int ref_y)
+{
+   const int dx = VRT_CELL_W + HRZ_CELL_W;
+   const int dy = 2 * HRZ_CELL_H + VRT_CELL_H;
+   vrt_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// Draw segment ccc at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_c_out(int ref_x, int ref_y)
+{
+   const int dx = VRT_CELL_W + HRZ_CELL_W;
+   const int dy = HRZ_CELL_H;
+   vrt_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// Draw segment ddd at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_d_out(int ref_x, int ref_y)
+{
+   const int dx = VRT_CELL_W;
+   const int dy = 0;
+   hrz_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// Draw segment eee at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_e_out(int ref_x, int ref_y)
+{
+   const int dx = 0;
+   const int dy = 2 * HRZ_CELL_H + VRT_CELL_H;
+   vrt_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// Draw segment fff at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_f_out(int ref_x, int ref_y)
+{
+   const int dx = 0;
+   const int dy = HRZ_CELL_H;
+   vrt_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// Draw segment ggg at its proper offset from the reference point 
+// (ref_x, ref_y).
+inline void seg_g_out(int ref_x, int ref_y)
+{
+   const int dx = VRT_CELL_W;
+   const int dy = HRZ_CELL_H + VRT_CELL_H;
+   hrz_segment_out(ref_x + dx, ref_y + dy);
+}
+
+// 7-segment numbers on the display are built up from various 
+// combinations of horizontal and vertical segments.
+
+// Draw zero at reference point (x, Y_OFFSET).
+void digit_0(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+   seg_f_out(x, Y_OFFSET);
+}
+
+// Draw one at reference point (x, Y_OFFSET).
+void digit_1(int x)
+{
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+}
+
+// Draw twp at reference point (x, Y_OFFSET).
+void digit_2(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_b_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_f_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Draw three at reference point (x, Y_OFFSET).
+void digit_3(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Draw four at reference point (x, Y_OFFSET).
+void digit_4(int x)
+{
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Draw five at reference point (x, Y_OFFSET).
+void digit_5(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Draw six at reference point (x, Y_OFFSET).
+void digit_6(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+   seg_f_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Draw seven at reference point (x, Y_OFFSET).
+void digit_7(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+}
+
+// Draw eight at reference point (x, Y_OFFSET).
+void digit_8(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+   seg_f_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Draw nine at reference point (x, Y_OFFSET).
+void digit_9(int x)
+{
+   seg_a_out(x, Y_OFFSET);
+   seg_b_out(x, Y_OFFSET);
+   seg_c_out(x, Y_OFFSET);
+   seg_d_out(x, Y_OFFSET);
+   seg_e_out(x, Y_OFFSET);
+   seg_g_out(x, Y_OFFSET);
+}
+
+// Given the digit place of digit, return its horizontal offset on 
+// the NXT screen. The place of a digit is its index in the counter 
+// array.
+int offset(int place)
+{
+   return X_OFFSET + (DIGITS - place - 1) * DIGIT_WIDTH;
+}
+
+// Section defining counter control tasks
+
+// Given a button's ID number, return true if that button has been 
+// bumped. Otherwise return false.
+bool button_bumped(const byte btn)
+{
+   bool result = false;
+   if (ButtonPressed(btn, false))
+   {
+      while (ButtonPressed(btn, true));
+      PlayFile("! Click.rso");
+      result = true;
+   }
+   return result;
+}
+
+// When the right button is bumped, increment the counter. The 
+// for-loop performs carry propagation.
+task increment()
+{
+   byte carry;
+   while(true)
+   {
+      Acquire(counter_mutex);
+      if ((! counter_changed) && button_bumped(BTNRIGHT))
+      {
+         carry = 1;
+         for (int i = 0; (carry == 1) && (i < DIGITS); ++i)
+         {
+            int d = counter[i] + carry;
+            if (d > 9)
+            {
+               d = 0;
+               carry = 1;
+            }
+            else carry = 0;
+            counter[i] = d;
+         }
+         counter_changed = true;
+      }
+      Release(counter_mutex);
+      Yield();
+   }
+}
+
+// When the left button is bumped, decrement the counter. The 
+// for-loop performs borrow propagation.
+task decrement()
+{
+   byte borrow;
+   while(true)
+   {
+      Acquire(counter_mutex);
+      if ((! counter_changed) && button_bumped(BTNLEFT))
+      {
+         borrow = 1;
+         for (int i = 0; (borrow == 1) && (i < DIGITS); ++i)
+         {
+            int d = counter[i] - borrow;
+            if (d < 0)
+            {
+               d = 9;
+               borrow = 1;
+            }
+            else borrow = 0;
+            counter[i] = d;
+         }
+         counter_changed = true;
+      }
+      Release(counter_mutex);
+      Yield();
+   }
+}
+
+// When the center button is bumped, zero the counter.
+task zero()
+{
+   while(true)
+   {
+      Acquire(counter_mutex);
+      if ((! counter_changed) && button_bumped(BTNCENTER))
+      {
+         ArrayInit(counter, 0, DIGITS);
+         counter_changed = true;
+      }
+      Release(counter_mutex);
+      Yield();
+   }
+}
+
+// When the count has changed, update the NXT screen with the new 
+// count.
+task show_count()
+{
+   while(true)
+   {
+      Acquire(counter_mutex);
+      if (counter_changed)
+      {
+         ClearScreen();
+         for (int i = 0; i < DIGITS; ++i)
+         {
+            switch (counter[i])
+            {
+            case 0:
+               digit_0(offset(i));
+               break;
+            case 1:
+               digit_1(offset(i));
+               break;
+            case 2:
+               digit_2(offset(i));
+               break;
+            case 3:
+               digit_3(offset(i));
+               break;
+            case 4:
+               digit_4(offset(i));
+               break;
+            case 5:
+               digit_5(offset(i));
+               break;
+            case 6:
+               digit_6(offset(i));
+               break;
+            case 7:
+               digit_7(offset(i));
+               break;
+            case 8:
+               digit_8(offset(i));
+               break;
+            case 9:
+               digit_9(offset(i));
+               break;
+            }
+         }
+         counter_changed = false;
+      }
+      Release(counter_mutex);
+      Yield();
+   }
+}
+
+// Section defining start-up code.
+
+task main()
+{
+   Precedes(show_count, zero, increment, decrement);
+   counter = 0;
+   counter_changed = true;
+}

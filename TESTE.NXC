@@ -1,0 +1,21 @@
+long prev_tick;
+long prev_deg = 0;
+string rpm_msg()
+{
+   long dt = CurrentTick() - prev_tick;
+   long deg = MotorRotationCount(MOTOR) - prev_deg;
+   float rpm = deg * DEG_TO_RPM / dt;
+   prev_deg = MotorRotationCount(MOTOR);
+   prev_tick = CurrentTick();
+   return FormatNum("RPM: %5.1f", rpm);
+}
+task main()
+{
+   prev_tick = CurrentTick();
+   OnFwd(MOTOR, FULL_SPEED);
+   while (true)
+   {
+      Wait(MS_500); // update display every 0.5 seconds
+      TextOut(0, LCD_LINE2, rpm_msg(), true);
+   }
+}

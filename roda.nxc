@@ -1,0 +1,10 @@
+task main(){
+  while (IN_1 != 1) {
+    OnFwd(OUT_A, 500);
+    Wait(SEC_2);
+  }
+  while (IN_1 != 1) {
+    OnRev(OUT_A, 500);
+    Wait(SEC_2);
+  }  
+}
