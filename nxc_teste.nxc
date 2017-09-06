@@ -1,0 +1,58 @@
+#include "teste.h"
+void teste() {
+
+  int p1 =  75;
+  int i = 0;
+  int tA = 2000;
+  int tC = 1500;
+
+  OnFwd(OUT_AC, p1);
+  Wait(tA);
+  Off(OUT_AC);
+
+  OnFwd(OUT_A, p1);
+  OnRev(OUT_C, p1);
+  Wait(tC);
+  Off(OUT_AC);
+
+  OnFwd(OUT_AC, p1);
+  Wait(tA);
+  Off(OUT_AC);
+
+  OnFwd(OUT_C, p1);
+  OnRev(OUT_A, p1);
+  Wait(tC);
+  Off(OUT_AC);
+
+  OnFwd(OUT_AC, p1);
+  Wait(tA);
+  Off(OUT_AC);
+
+  OnFwd(OUT_C, p1);
+  OnRev(OUT_A, p1);
+  Wait(tC);
+  Off(OUT_AC);
+
+  OnFwd(OUT_AC, p1);
+  Wait(tA);
+  Off(OUT_AC);
+
+  OnFwd(OUT_A, p1);
+  OnRev(OUT_C, p1);
+  Wait(tC);
+  Off(OUT_AC);
+
+  OnFwd(OUT_AC, p1);
+  Wait(tA);
+  Off(OUT_AC);
+
+  for (i = 0; i<5;i++){
+    OnFwd(OUT_B, p1);
+    Wait(1000);
+    Off(OUT_B);
+    OnRev(OUT_B, p1);
+    Wait(1000);
+    Off(OUT_B);
+  }
+
+}
