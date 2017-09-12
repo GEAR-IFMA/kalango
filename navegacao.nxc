@@ -1,15 +1,18 @@
 mutex moveMutex;
 
 task ligar_a() {
-  OnFwd(OUT_A, 70);
-  Wait(2000);
+  RotateMotorPID(OUT_A, 70, 535, 50, 50, 50);
 }
 
 task ligar_b() {
-  OnRev(OUT_C, 70);
-  Wait(2000);
+  RotateMotorPID(OUT_C, 70, -535, 50, 50, 50);
 }
 
 task main() {
+  SetSensorLowspeed(IN_4);
+  OnRev(OUT_AC, 75);
+  until(SensorUS(IN_4) < 15);
+  Float(OUT_AC);
+  Wait(1000);
   Precedes(ligar_a, ligar_b);
 }
