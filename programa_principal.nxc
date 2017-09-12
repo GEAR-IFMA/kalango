@@ -1,0 +1,10 @@
+task main() {
+  while(true) {
+      if (encontra_preto()){
+        fim();
+      }
+      else if (encontra_cor()){
+        explora();
+      }
+  }
+}
