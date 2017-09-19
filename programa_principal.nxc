@@ -1,13 +1,15 @@
-  #include <e_preto.h>
-  #include <encontra_cor.h>
+  #include <"navegacao.h">
+  #include <"cor.h">
 
   task main() {
-    while(true) {
-      if (e_preto()){
-          fim_linha();
-        }
-        else if (encontra_cor()){
-          explora();
-        }
-    }
+    Precedes(tPrinta_cor,tGira_180);
   }
+  /*
+  task main() {
+    SetSensorLowspeed(IN_4);
+    OnRev(OUT_AC, 75);
+    until(SensorUS(IN_4) < 15);
+    Float(OUT_AC);
+    gira_180();
+  }
+  */
