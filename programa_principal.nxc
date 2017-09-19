@@ -1,12 +1,13 @@
-#include <e_preto.h>
-#enclude <encontra_cor.h>
-task main() {
-  while(true) {
+  #include <e_preto.h>
+  #include <encontra_cor.h>
+
+  task main() {
+    while(true) {
       if (e_preto()){
-        fim_linha();
-      }
-      else if (encontra_cor()){
-        explora();
-      }
+          fim_linha();
+        }
+        else if (encontra_cor()){
+          explora();
+        }
+    }
   }
-}
