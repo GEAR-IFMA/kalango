@@ -1,11 +1,21 @@
-mutex moveMutex;
-
-task ligar_a() {
-  RotateMotorPID(OUT_A, 70, 535, 50, 50, 50);
+int power = 100;
+void ligar_a() {
+  RotateMotorPID(OUT_A, power, 535, 50, 50, 50);
 }
 
-task ligar_b() {
-  RotateMotorPID(OUT_C, 70, -535, 50, 50, 50);
+void ligar_b() {
+  RotateMotorPID(OUT_C, power, -535, 50, 50, 50);
+}
+//RotateMotorPID(byte outputs, char pwr, long angle, byte p, byte i, byte d)
+
+
+void gira_90(){
+    ligar_a();
+    ligar_b();
+}
+void gira_180(){
+  gira_90();
+  gira_90();
 }
 
 task main() {
@@ -13,6 +23,5 @@ task main() {
   OnRev(OUT_AC, 75);
   until(SensorUS(IN_4) < 15);
   Float(OUT_AC);
-  Wait(1000);
-  Precedes(ligar_a, ligar_b);
+  gira_180();
 }
