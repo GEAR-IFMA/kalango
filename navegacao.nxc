@@ -1,4 +1,5 @@
 int power = 100;
+
 void ligar_a() {
   RotateMotorPID(OUT_A, power, 535, 50, 50, 50);
 }
@@ -6,8 +7,6 @@ void ligar_a() {
 void ligar_b() {
   RotateMotorPID(OUT_C, power, -535, 50, 50, 50);
 }
-//RotateMotorPID(byte outputs, char pwr, long angle, byte p, byte i, byte d)
-
 
 void gira_90(){
     ligar_a();
