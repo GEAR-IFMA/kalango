@@ -1,7 +1,0 @@
-#include "teste.h"
-task main() {
-  OnFwd(OUT_AC, 75);
-  Wait(2000);
-  OnRev(OUT_AC,75);
-  Wait(4000);
-}
