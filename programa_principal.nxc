@@ -1,15 +1,13 @@
   #include <"navegacao.h">
   #include <"cor.h">
+ /*#include <"garra.h">*/
 
-  task main() {
-    Precedes(tPrinta_cor,tGira_180);
-  }
-  /*
-  task main() {
-    SetSensorLowspeed(IN_4);
-    OnRev(OUT_AC, 75);
-    until(SensorUS(IN_4) < 15);
-    Float(OUT_AC);
-    gira_180();
-  }
-  */
+task main() {
+  SetSensorLowspeed(IN_4);
+  SetSensorLowspeed(IN_3);
+  OnRev(OUT_AC, 75);
+  until(SensorUS(IN_3) < 15);
+  Float(OUT_AC);
+  gira_90_Hor();
+  gira_90_Ant();
+}

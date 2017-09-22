@@ -1,3 +1,7 @@
+// essa biblioteca fornece uma função e uma tarefa que escrevem na tela do Lego a cor
+// que está na frente do sensor, para uso síncrono use a função printa_cor(),
+// para uso assíncrono use a tarefa tPrinta_cor
+
 void fim_rua(){
   ClearScreen();
   TextOut(0, 40,"preto");
@@ -22,7 +26,6 @@ void branco(){
   ClearScreen();
   TextOut(0, 40,"amarelo");
 }
-
 
 void printa_cor() {
     int nColor;
