@@ -4,6 +4,7 @@
 
 void fim_rua(){
   ClearScreen();
+  OnRev(OUT_AC, 50);
   TextOut(0, 40,"preto");
 }
 void azul(){
@@ -24,13 +25,15 @@ void vermelho(){
 }
 void branco(){
   ClearScreen();
-  TextOut(0, 40,"amarelo");
+  gira_90_Hor();
+  gira_90_Hor();
+  OnRev(OUT_AC, 50);
+  Wait(2000);
 }
 
 void printa_cor() {
     int nColor;
     // liga o sensor
-    SetSensorColorFull(S1);
     while (true) {
         nColor = Sensor(S1);
         switch(nColor) {
@@ -42,7 +45,7 @@ void printa_cor() {
             case 6:branco();break;//branco
             default: break;
         }
-        while( Sensor(S1) == nColor );
+        //while( Sensor(S1) == nColor );
     }
 }
 

@@ -23,7 +23,6 @@ void branco(){
   TextOut(0, 40,"amarelo");
 }
 
-
 task main() {
 
     int nColor;
