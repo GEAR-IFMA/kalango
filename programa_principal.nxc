@@ -3,11 +3,13 @@
  /*#include <"garra.h">*/
 
 task main() {
-  SetSensorLowspeed(IN_4);
-  SetSensorLowspeed(IN_3);
-  OnRev(OUT_AC, 75);
-  until(SensorUS(IN_3) < 15);
-  Float(OUT_AC);
-  gira_90_Hor();
-  gira_90_Ant();
+  while (1) {
+    SetSensorLowspeed(IN_4);
+    SetSensorLowspeed(IN_3);
+    OnRev(OUT_AC, 75);
+    until(SensorUS(IN_3) < 15);
+    Float(OUT_AC);
+    gira_90_Hor();
+    gira_90_Ant();
+  }
 }
