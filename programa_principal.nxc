@@ -1,27 +1,15 @@
-  #include <"navegacao.h">
+ #include <"navegacao.h">
   #include <"cor.h">
   #include <"garra.h">
 
 task main() {
-<<<<<<< Updated upstream
-  SetSensorLowspeed(IN_4);
-  SetSensorLowspeed(IN_3);
-  SetSensorColorFull(S1);
-  while (1) { 
-    printa_cor();
-    //until(SensorUS(IN_3) < 15);
-    //Float(OUT_AC);
-    //gira_90_Hor();
-    //gira_90_Ant();
-  }
-=======
  while(true){
     SetSensorLowspeed(IN_4);
     SetSensorLowspeed(IN_3);
     OnRev(OUT_AC, 75);
     until(SensorUS(IN_3) < 15);
     Float(OUT_AC);
-    gira_90_Hor();
-    gira_90_Ant();
->>>>>>> Stashed changes
+  //  gira_90_Hor();
+  //  gira_90_Ant();
+}
 }
