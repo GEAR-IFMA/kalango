@@ -25,7 +25,7 @@ void ligar_a_Ant() {
 void ligar_b_Ant() {
   RotateMotorPID(OUT_C, power, 535, 50, 50, 50);
 }
-//----------------------------------------------
+//---------------------------------------------
 void gira_90_Hor(){
     ligar_a_Hor();
     ligar_b_Hor();
