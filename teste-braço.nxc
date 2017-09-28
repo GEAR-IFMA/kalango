@@ -1,0 +1,25 @@
+#include <"navegacao.h">
+#include <"cor.h">
+#include <"garra.h">
+
+void pega_1(){
+  power = 100;
+  OnFwd(OUT_C, power);
+}
+
+task main() {
+/*while (1) {
+  SetSensorLowspeed(IN_4);
+  SetSensorLowspeed(IN_3);
+  OnRev(OUT_AC, 75);
+  until(SensorUS(IN_3) < 15);
+  Float(OUT_AC);
+  gira_90_Hor();
+  gira_90_Ant();
+}*/
+while (IN_1 == 1) {
+  power = 30;
+  OnFwd(OUT_C, power);
+  Wait(SEC_2);
+ }
+}

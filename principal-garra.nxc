@@ -1,0 +1,15 @@
+#include <"navegacao.h">
+#include <"cor.h">
+/*#include <"garra.h">*/
+
+task main() {
+while (1) {
+  OnRev(OUT_C, 75);
+  Wait(SEC_1);
+  Float(OUT_AC);
+  OnFwd(OUT_C, 75);
+  Wait(SEC_1);
+  Float(OUT_AC);
+  gira_90_Hor();''
+}
+}
