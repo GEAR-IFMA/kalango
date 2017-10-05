@@ -1,0 +1,10 @@
+bool garra_sobe() {
+  RotateMotorPID(OUT_C, 75,560,50,50,50);
+  Wait(1000);
+  Off(OUT_C);
+}
+
+bool garra_desce(){
+  RotateMotorPID(OUT_C, 40,-420,50,50,50);
+  TextOut(0, 40,"ue\n");
+}

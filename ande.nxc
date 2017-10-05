@@ -1,0 +1,6 @@
+int ande(int segundos,int pwr){
+  OnRev(OUT_AC, pwr);
+  Wait(segundos*1000);
+  Stop(0);
+  TextOut(0, 40,"ande\n");
+}

@@ -1,0 +1,8 @@
+#include <"navegacao.nxc">
+#include <"ande.nxc">
+task main() {
+  while (true) {
+    gira_90_Hor();
+    ande(2,50);
+  }
+}

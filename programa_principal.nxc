@@ -1,15 +1,26 @@
- #include <"navegacao.h">
-  #include <"cor.h">
-  #include <"garra.h">
+#include <"navegacao.nxc">
+#include "ande.nxc"
+//#include <"cor.h">
+//#include <"garra.h">
+
+void setup(){
+  SetSensorLowspeed(IN_4);
+  SetSensorColorFull(S1);
+}
+
+void vai() {
+  RotateMotor(OUT_A, 50, 425);
+  TextOut(0, 40,"motor A ant\n");
+}
 
 task main() {
- while(true){
-    SetSensorLowspeed(IN_4);
-    SetSensorLowspeed(IN_3);
-    OnRev(OUT_AC, 75);
-    until(SensorUS(IN_3) < 15);
-    Float(OUT_AC);
-  //  gira_90_Hor();
-  //  gira_90_Ant();
-}
+setup();
+while(true){
+  OnRev(OUT_AC, 75);
+  until(Sensor(S1) == 5 || Sensor(S1) == 1);
+  Stop(0);
+  ande(2, 50);
+  vai();
+  ande(2, 50);
+  }
 }
