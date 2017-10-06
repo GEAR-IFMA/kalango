@@ -1,0 +1,17 @@
+#define TURN_TIME 360
+int move_time; // define uma variável
+
+task main()
+{
+move_time = 200; // define um valor inicial
+
+repeat(10)
+{
+    OnFwd(OUT_AB,75);
+    Wait(move_time); // usa a variável para esperar
+    OnRev(OUT_B, 75);
+    Wait(TURN_TIME);
+    move_time += 200; // aumenta o valor da variável
+}
+  Off(OUT_AB);
+}

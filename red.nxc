@@ -1,0 +1,16 @@
+task main(){
+SetSensorColorFull(S1);
+int x;
+x = 5;
+//while(true){
+  //OnFwd(OUT_AB,70);
+    if((S1) == x)
+    {
+    RotateMotorPID(OUT_AB, 50, 950, 50, 50, 50);
+    Wait(500);
+    RotateMotorPID(OUT_B, 50, 1010, 50, 50, 50);
+    }else{
+      OnFwd(OUT_AB,70);
+    }
+}
+//}
