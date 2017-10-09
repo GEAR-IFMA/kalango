@@ -2,12 +2,13 @@ task main() {
 SetSensorColorFull(S1);
 
 while(true){
-  OnFwd(OUT_AB,50);
-  if(Sensor(S1) == 5){
-      Off(OUT_AB);
-      RotateMotorPID(OUT_B, 50, 1010, 50, 50, 50);
-      Wait(1000);
-      RotateMotorPID(OUT_AB, 50, 950, 50, 50, 50);
-  }
+OnFwd(OUT_AB,50);
+    if(Sensor(S1) == 5){
+        Wait(500);
+        RotateMotorPID(OUT_AB, 40, 120, 50, 50, 50);
+        Wait(1000);
+        RotateMotorPID(OUT_A, 50, 1000, 50, 50, 50);
+        RotateMotorPID(OUT_B, 50, -1000, 50, 50, 50);
+    }
 }
 }

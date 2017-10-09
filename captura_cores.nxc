@@ -1,0 +1,36 @@
+task main() {
+SetSensorColorFull(S1);
+
+while(true){
+OnFwd(OUT_AB,70);
+    if(Sensor(S1) == 1){ //Preto
+        Wait(500);
+        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
+        Wait(1000);
+        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
+        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    }
+    if(Sensor(S1) == 5){ //Vermelho
+        Wait(500);
+        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
+        Wait(1000);
+        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
+        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    }
+    if(Sensor(S1) == 3){ //Verde
+        Wait(500);
+        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
+        Wait(1000);
+        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
+        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    }
+    if(Sensor(S1) == 4){ //Amarelo
+        Wait(500);
+        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
+        Wait(1000);
+        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
+        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    }
+
+}
+}

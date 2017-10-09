@@ -1,0 +1,3 @@
+task main(){
+    RotateMotorEx(OUT_AB, 40, 1050, 50, true, true);
+}

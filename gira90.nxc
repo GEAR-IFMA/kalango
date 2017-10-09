@@ -1,4 +1,4 @@
-task main() {
+ task main() {
     OnFwd(OUT_AB, 75);
     Wait(800);
     OnRev(OUT_B, 75);
