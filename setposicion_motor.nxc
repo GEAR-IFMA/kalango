@@ -1,0 +1,7 @@
+task main() {
+  PosRegEnable(OUT_B);
+  PosRegSetAngle(OUT_B, 360);
+  Wait(3000);
+  PosRegAddAngle(OUT_B, 360);
+  Wait(3000);
+}

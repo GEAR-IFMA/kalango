@@ -7,7 +7,7 @@ while (true) {
   OnFwd(OUT_AB,60);
     if (SensorUS(IN_3) < NEAR) {
       Off(OUT_AB);
-      Wait(1000);
+      Wait(1000); 
       RotateMotorPID(OUT_B, 50, 1010, 50, 50, 50);
     }
     if (SensorUS(IN_4) < NEAR) {
