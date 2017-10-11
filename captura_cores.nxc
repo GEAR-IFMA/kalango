@@ -1,37 +1,34 @@
+void gira_180() {
+  Wait(500);
+  RotateMotorPID(OUT_AC, 40, 350, 50, 50, 50);
+  Wait(1000);
+  RotateMotorEx(OUT_AC, 40, 1060, 50, true, true);
+  RotateMotorPID(OUT_AC, 40, 500, 50, 50, 50);
+}
+
+void gira_90_ant() {
+  Wait(500);
+  RotateMotorPID(OUT_AC, 40, 120, 50, 50, 50);
+  Wait(1000);
+  RotateMotorPID(OUT_A, 50, 500, 50, 50, 50);
+  RotateMotorPID(OUT_C, 50, -500, 50, 50, 50);
+}
+
 task main() {
   SetSensorColorFull(S1);
-  PosRegEnable(OUT_C);
-
-while(true){
-  OnFwd(OUT_AB,70);
-    if(Sensor(S1) == INPUT_BLACKCOLOR){ //Preto
-        Wait(500);
-        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
-        Wait(1000);
-        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
-        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+  while(true){
+    OnFwd(OUT_AC,70);
+    if(Sensor(S1) == 1){ //Preto
+        gira_180();
     }
-    if(Sensor(S1) == INPUT_REDCOLOR){ //Vermelho
-        Wait(500);
-        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
-        Wait(1000);
-        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
-        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    if(Sensor(S1) == 5){ //Vermelho
+        gira_90_ant();
     }
-    if(Sensor(S1) == INPUT_GREENCOLOR){ //Verde
-        Wait(500);
-        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
-        Wait(1000);
-        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
-        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    if(Sensor(S1) == 3){ //Verde
+        gira_90_ant();
     }
-    if(Sensor(S1) == INPUT_YELLOWCOLOR){ //Amarelo
-        Wait(500);
-        RotateMotorPID(OUT_AB, 40, 350, 50, 50, 50);
-        Wait(1000);
-        RotateMotorEx(OUT_AB, 40, 1050, 100, true, true);
-        RotateMotorPID(OUT_AB, 40, 500, 50, 50, 50);
+    if(Sensor(S1) == 4){ //Amarelo
+        gira_90_ant();
     }
-
-}
+  }
 }

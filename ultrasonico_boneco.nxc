@@ -3,6 +3,7 @@ task main() {
   SetSensorLowspeed(IN_3); //DIREITA
   SetSensorLowspeed(IN_4); //ESQUERDA
 
+<<<<<<< HEAD
 while (true) {
   OnFwd(OUT_AB,60);
     if (SensorUS(IN_3) < NEAR) {
@@ -16,4 +17,19 @@ while (true) {
       RotateMotorPID(OUT_A, 50, 1010, 50, 50, 50);
     }
 }
+=======
+  while (true) {
+    OnFwd(OUT_AB,60);
+      if (SensorUS(IN_3) < NEAR) {
+        Off(OUT_AB);
+        Wait(1000);
+        RotateMotorPID(OUT_B, 50, 1010, 50, 50, 50);
+      }
+      if (SensorUS(IN_4) < NEAR) {
+        Off(OUT_AB);
+        Wait(1000);
+        RotateMotorPID(OUT_A, 50, 1010, 50, 50, 50);
+      }
+  }
+>>>>>>> b951075131ed0cbd496aee7cf94f63ebed4d0e49
 }

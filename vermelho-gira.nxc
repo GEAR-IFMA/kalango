@@ -3,7 +3,7 @@ SetSensorColorFull(S1);
 
 while(true){
 OnFwd(OUT_AB,50);
-    if(Sensor(S1) == 5){
+    if(Sensor(S1) == INPUT_REDCOLOR){
         Wait(500);
         RotateMotorPID(OUT_AB, 40, 120, 50, 50, 50);
         Wait(1000);
