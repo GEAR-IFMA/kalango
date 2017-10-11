@@ -1,5 +1,7 @@
-task main (){
-    RotateMotorPID(OUT_AB, 50, 950, 50, 50, 50);
+task main(){
+
+    RotateMotorPID(OUT_AC, 50, 500, 50, 50, 50);
     Wait(500);
-    RotateMotorPID(OUT_B, 50, 1010, 50, 50, 50);
+    RotateMotorEx(OUT_AC, 50, 500, 50, true, true);
+
 }

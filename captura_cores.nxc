@@ -1,3 +1,11 @@
+#include <"NXCDefs.h">
+#define 	INPUT_BLACKCOLOR   1
+#define 	INPUT_BLUECOLOR   2
+#define 	INPUT_GREENCOLOR   3
+#define 	INPUT_YELLOWCOLOR   4
+#define 	INPUT_REDCOLOR   5
+#define 	INPUT_WHITECOLOR   6
+
 void gira_180() {
   Wait(500);
   RotateMotorPID(OUT_AC, 40, 350, 50, 50, 50);
@@ -8,27 +16,39 @@ void gira_180() {
 
 void gira_90_ant() {
   Wait(500);
-  RotateMotorPID(OUT_AC, 40, 120, 50, 50, 50);
-  Wait(1000);
-  RotateMotorPID(OUT_A, 50, 500, 50, 50, 50);
-  RotateMotorPID(OUT_C, 50, -500, 50, 50, 50);
+  RotateMotorPID(OUT_AC, 50, 500, 50, 50, 50);
+  Wait(500);
+  RotateMotorEx(OUT_AC, 50, 500, 50, true, true);
+  RotateMotorPID(OUT_AC, 50, 1000, 50, 50, 50);
 }
 
 task main() {
+  ColorSensorReadType csr;
   SetSensorColorFull(S1);
+  csr.Port = S1;
   while(true){
-    OnFwd(OUT_AC,70);
-    if(Sensor(S1) == 1){ //Preto
-        gira_180();
+    OnFwd(OUT_AC, 50);
+    SysColorSensorRead(csr);
+    int ColorPicket = SensorValue(S1);
+      NumOut(0, LCD_LINE1, ColorPicket);
+    if (csr.Result == NO_ERR) {
+
+          if(csr.ColorValue == 5){ //Preto
+              gira_90_ant();
+          }
+          else if(csr.ColorValue  == 3){ //Verde
+              gira_90_ant();
+          }
     }
-    if(Sensor(S1) == 5){ //Vermelho
+    /*else if(Sensor(S1) == 5){ //Vermelho
         gira_90_ant();
     }
-    if(Sensor(S1) == 3){ //Verde
+    else if(Sensor(S1) == 3){ //Verde
         gira_90_ant();
     }
-    if(Sensor(S1) == 4){ //Amarelo
+    else if(Sensor(S1) == 4){ //Amarelo
         gira_90_ant();
-    }
+    }*/
+    ResetSensor(S1);
   }
 }
